@@ -1,0 +1,186 @@
+﻿const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+function getToken(): string | null {
+  return localStorage.getItem('auth_token');
+}
+
+function authHeaders(): HeadersInit {
+  const token = getToken();
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+}
+
+async function handleResponse<T>(res: globalThis.Response): Promise<T> {
+  if (res.status === 204) return undefined as T;
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  return data as T;
+}
+
+export const api = {
+  auth: {
+    async login(email: string, password: string) {
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      return handleResponse<{ token: string; user: Record<string, unknown> }>(res);
+    },
+    async me() {
+      const res = await fetch(`${API_BASE}/auth/me`, { headers: authHeaders() });
+      return handleResponse<Record<string, unknown>>(res);
+    },
+    setToken(token: string) {
+      localStorage.setItem('auth_token', token);
+    },
+    clearToken() {
+      localStorage.removeItem('auth_token');
+    },
+    getToken,
+  },
+
+  servicios: {
+    async list() {
+      const res = await fetch(`${API_BASE}/servicios/all`, { headers: authHeaders() });
+      return handleResponse<unknown[]>(res);
+    },
+    async listPublic() {
+      const res = await fetch(`${API_BASE}/servicios`);
+      return handleResponse<unknown[]>(res);
+    },
+    async create(data: Record<string, unknown>) {
+      const res = await fetch(`${API_BASE}/servicios`, {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify(data),
+      });
+      return handleResponse<unknown>(res);
+    },
+    async update(id: string, data: Record<string, unknown>) {
+      const res = await fetch(`${API_BASE}/servicios/${id}`, {
+        method: 'PUT', headers: authHeaders(), body: JSON.stringify(data),
+      });
+      return handleResponse<unknown>(res);
+    },
+    async remove(id: string) {
+      const res = await fetch(`${API_BASE}/servicios/${id}`, {
+        method: 'DELETE', headers: authHeaders(),
+      });
+      return handleResponse<void>(res);
+    },
+  },
+
+  blog: {
+    async list() {
+      const res = await fetch(`${API_BASE}/blog/all`, { headers: authHeaders() });
+      return handleResponse<unknown[]>(res);
+    },
+    async listPublic() {
+      const res = await fetch(`${API_BASE}/blog`);
+      return handleResponse<unknown[]>(res);
+    },
+    async categorias() {
+      const res = await fetch(`${API_BASE}/blog/categorias`);
+      return handleResponse<unknown[]>(res);
+    },
+    async create(data: Record<string, unknown>) {
+      const res = await fetch(`${API_BASE}/blog`, {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify(data),
+      });
+      return handleResponse<unknown>(res);
+    },
+    async update(id: string, data: Record<string, unknown>) {
+      const res = await fetch(`${API_BASE}/blog/${id}`, {
+        method: 'PUT', headers: authHeaders(), body: JSON.stringify(data),
+      });
+      return handleResponse<unknown>(res);
+    },
+    async remove(id: string) {
+      const res = await fetch(`${API_BASE}/blog/${id}`, {
+        method: 'DELETE', headers: authHeaders(),
+      });
+      return handleResponse<void>(res);
+    },
+  },
+
+  vacantes: {
+    async list() {
+      const res = await fetch(`${API_BASE}/vacantes/all`, { headers: authHeaders() });
+      return handleResponse<unknown[]>(res);
+    },
+    async listPublic() {
+      const res = await fetch(`${API_BASE}/vacantes`);
+      return handleResponse<unknown[]>(res);
+    },
+    async create(data: Record<string, unknown>) {
+      const res = await fetch(`${API_BASE}/vacantes`, {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify(data),
+      });
+      return handleResponse<unknown>(res);
+    },
+    async update(id: string, data: Record<string, unknown>) {
+      const res = await fetch(`${API_BASE}/vacantes/${id}`, {
+        method: 'PUT', headers: authHeaders(), body: JSON.stringify(data),
+      });
+      return handleResponse<unknown>(res);
+    },
+    async remove(id: string) {
+      const res = await fetch(`${API_BASE}/vacantes/${id}`, {
+        method: 'DELETE', headers: authHeaders(),
+      });
+      return handleResponse<void>(res);
+    },
+  },
+
+  postulaciones: {
+    async list() {
+      const res = await fetch(`${API_BASE}/postulaciones`, { headers: authHeaders() });
+      return handleResponse<unknown[]>(res);
+    },
+    async create(data: Record<string, unknown>) {
+      const res = await fetch(`${API_BASE}/postulaciones`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data),
+      });
+      return handleResponse<unknown>(res);
+    },
+    async updateEstado(id: string, estado: string) {
+      const res = await fetch(`${API_BASE}/postulaciones/${id}`, {
+        method: 'PUT', headers: authHeaders(), body: JSON.stringify({ estado }),
+      });
+      return handleResponse<unknown>(res);
+    },
+  },
+
+  contactos: {
+    async create(data: Record<string, unknown>) {
+      const res = await fetch(`${API_BASE}/contactos`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data),
+      });
+      return handleResponse<unknown>(res);
+    },
+  },
+
+  usuarios: {
+    async list() {
+      const res = await fetch(`${API_BASE}/usuarios`, { headers: authHeaders() });
+      return handleResponse<unknown[]>(res);
+    },
+    async create(data: Record<string, unknown>) {
+      const res = await fetch(`${API_BASE}/usuarios`, {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify(data),
+      });
+      return handleResponse<unknown>(res);
+    },
+    async update(id: string, data: Record<string, unknown>) {
+      const res = await fetch(`${API_BASE}/usuarios/${id}`, {
+        method: 'PUT', headers: authHeaders(), body: JSON.stringify(data),
+      });
+      return handleResponse<unknown>(res);
+    },
+    async stats() {
+      const res = await fetch(`${API_BASE}/usuarios/stats`, { headers: authHeaders() });
+      return handleResponse<Record<string, number>>(res);
+    },
+  },
+};
