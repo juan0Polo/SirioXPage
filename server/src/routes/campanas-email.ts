@@ -165,7 +165,7 @@ router.post('/', requireAuth, requireAdmin, async (req: AuthRequest, res: Respon
     );
 
     const campaign = campaignResult.rows[0];
-    const insertedRecipients: { id: string; email: string; nombre: string; datos: Record<string, string> }[] = [];
+    const insertedRecipients: { id: string; email: string; nombre: string; datos?: Record<string, string> }[] = [];
 
     for (const recipient of validRecipients) {
       const result = await pool.query(

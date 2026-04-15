@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth';
@@ -11,6 +12,8 @@ import contactosRoutes from './routes/contactos';
 import notificacionesContactoRoutes from './routes/notificaciones-contacto';
 import usuariosRoutes from './routes/usuarios';
 import campanasEmailRoutes from './routes/campanas-email';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 const PORT = process.env.PORT || 3001;
