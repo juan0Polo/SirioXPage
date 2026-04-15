@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 export interface AuthRequest extends Request {
   userId?: string;
   userRol?: string;
+  body: any;
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || 'siriox-dev-secret-change-in-production';
