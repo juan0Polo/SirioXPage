@@ -1,9 +1,10 @@
 services:
   - type: static
-    name: siriox-web
+    name: siriox-frontend
     env: node
     root: .
-    buildCommand: npm install --include=dev && npm run build
+    installCommand: npm install --include=dev
+    buildCommand: npm run build
     publishPath: dist
     plan: free
     envVars:
@@ -18,7 +19,8 @@ services:
     name: siriox-api
     env: node
     root: server
-    buildCommand: npm install --include=dev && npm run build
+    installCommand: npm install --include=dev
+    buildCommand: npm run build
     startCommand: npm run start
     healthCheckPath: /api/health
     plan: free
