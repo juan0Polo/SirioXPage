@@ -3,7 +3,7 @@ services:
     name: siriox-frontend
     env: node
     root: .
-    installCommand: npm install --include=dev
+    installCommand: npm install
     buildCommand: npm run build
     publishPath: dist
     plan: free
@@ -19,7 +19,7 @@ services:
     name: siriox-api
     env: node
     root: server
-    installCommand: npm install --include=dev
+    installCommand: npm install
     buildCommand: npm run build
     startCommand: npm run start
     healthCheckPath: /api/health
