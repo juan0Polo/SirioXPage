@@ -1,12 +1,10 @@
 import path from 'path';
-import { fileURLToPath } from 'url';
 import multer from 'multer';
 import { Router, Request, Response } from 'express';
 import { pool } from '../db';
 import { requireAuth, requireRRHH } from '../middleware/auth';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const uploadDir = path.join(__dirname, '../../uploads');
+const uploadDir = path.join(process.cwd(), 'uploads');
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, uploadDir),
   filename: (_req, file, cb) => cb(null, `${Date.now()}-${file.originalname.replace(/[^a-zA-Z0-9.\-_]/g, '_')}`),

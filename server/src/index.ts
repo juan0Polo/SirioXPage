@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth';
@@ -13,8 +12,6 @@ import notificacionesContactoRoutes from './routes/notificaciones-contacto';
 import usuariosRoutes from './routes/usuarios';
 import campanasEmailRoutes from './routes/campanas-email';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -23,7 +20,7 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/servicios', serviciosRoutes);
